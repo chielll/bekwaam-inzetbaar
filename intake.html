@@ -700,7 +700,7 @@
       Geen opleiding? Geen probleem, competenties worden op de werkvloer vastgesteld.
     </p>
     <div class="btn-row single">
-      <button class="btn-primary" onclick="goTo('s-vaard-01')">Verder &nbsp;→</button>
+      <button class="btn-primary" onclick="nextFromDiplomas()">Verder &nbsp;→</button>
     </div>
   </div>
 </div>
@@ -1390,6 +1390,15 @@
   };
 
   // ── NAVIGATION ──
+  function nextFromDiplomas() {
+    if (state.achtergrond === 'Instromer vanuit andere zorgorganisatie') {
+      buildFatima();
+      goTo('s-fatima');
+    } else {
+      goTo('s-vaard-01');
+    }
+  }
+
   function goTo(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
@@ -1784,11 +1793,13 @@
     document.getElementById('inp-jaar').value = '2018';
     updateNames();
 
-    // Achtergrond dropdown → Fatima shortcut
+    // Achtergrond dropdown → pre-fill diploma bij instromer
     document.getElementById('inp-achtergrond').addEventListener('change', function() {
       if (this.value === 'Instromer vanuit andere zorgorganisatie') {
-        buildFatima();
-        goTo('s-fatima');
+        document.getElementById('inp-diploma').value = 'Helpende Zorg & Welzijn niveau 2';
+        document.getElementById('inp-instelling').value = 'ROC Midden Nederland';
+        document.getElementById('inp-jaar').value = '2022';
+        applyDiploma('');
       }
     });
 
