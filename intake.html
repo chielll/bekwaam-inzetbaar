@@ -1414,6 +1414,11 @@
     state.achtergrond = document.getElementById('inp-achtergrond').value || state.achtergrond;
     state.locatie = document.getElementById('inp-locatie').value.trim();
     updateNames();
+    if (state.achtergrond === 'Instromer vanuit andere zorgorganisatie') {
+      document.getElementById('inp-diploma').value = 'Helpende Zorg & Welzijn niveau 2';
+      document.getElementById('inp-instelling').value = 'ROC Midden Nederland';
+      document.getElementById('inp-jaar').value = '2022';
+    }
   }
 
   function updateNames() {
@@ -1793,15 +1798,6 @@
     document.getElementById('inp-jaar').value = '2018';
     updateNames();
 
-    // Achtergrond dropdown → pre-fill diploma bij instromer
-    document.getElementById('inp-achtergrond').addEventListener('change', function() {
-      if (this.value === 'Instromer vanuit andere zorgorganisatie') {
-        document.getElementById('inp-diploma').value = 'Helpende Zorg & Welzijn niveau 2';
-        document.getElementById('inp-instelling').value = 'ROC Midden Nederland';
-        document.getElementById('inp-jaar').value = '2022';
-        applyDiploma('');
-      }
-    });
 
     // Diploma input listener
     const diplomaInput = document.getElementById('inp-diploma');
