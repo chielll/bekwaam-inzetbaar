@@ -706,6 +706,70 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
+     SCREEN FATIMA: GROEIPAD (Stap 3/3)
+═══════════════════════════════════════════ -->
+<div id="s-fatima-groeipad" class="screen">
+  <div class="card">
+    <div class="intake-meta">Nieuwe medewerker — intake</div>
+    <div class="stepper">
+      <div class="stepper-track"><div class="stepper-fill" style="width:100%"></div></div>
+      <div class="stepper-label">Stap 3/3 &nbsp;— &nbsp;Groeipad</div>
+    </div>
+    <h2>Wat is het groeipad voor <span id="h-groeipad-naam">Fatima</span>?</h2>
+
+    <div class="divider" style="margin-top:0"></div>
+    <p class="subtitle" style="color:rgba(100,9,52,0.65);font-weight:300">Huidige functie</p>
+
+    <div class="form-group">
+      <label>Huidige functie</label>
+      <div class="select-wrap">
+        <select id="inp-huidige-functie">
+          <option>Zorgondersteuner</option>
+          <option>Helpende</option>
+          <option>Helpende plus</option>
+          <option>Verzorgende IG</option>
+          <option>Verpleegkundige</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group" style="margin-bottom:0">
+        <label>Huidige organisatie</label>
+        <input type="text" id="inp-huidige-org" placeholder="bv Savogram">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label>Afdeling</label>
+        <input type="text" id="inp-afdeling" placeholder="bv Palliatieve zorg">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Aantal jaar ervaring</label>
+      <input type="text" id="inp-ervaring" placeholder="bv. 3">
+    </div>
+
+    <div class="divider"></div>
+    <p class="subtitle" style="color:rgba(100,9,52,0.65);font-weight:300">Welke ambities heeft <span class="groeipad-voornaam">Fatima</span></p>
+
+    <div class="form-group">
+      <label>Doelfunctie</label>
+      <div class="select-wrap">
+        <select id="inp-doelfunctie">
+          <option>Helpende plus</option>
+          <option>Verzorgende IG</option>
+          <option>Verpleegkundige</option>
+          <option>Teamleider zorg</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="btn-row single">
+      <button class="btn-primary" onclick="saveGroeipad(); buildFatima(); goTo('s-fatima')">Verder &nbsp;→</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
      SCREEN 4: VAARDIGHEDEN 01 — KWALITEIT VAN LEVEN
 ═══════════════════════════════════════════ -->
 <div id="s-vaard-01" class="screen">
@@ -1135,7 +1199,8 @@
     achtergrond: 'Zij-instromer',
     locatie: '',
     skills: {},
-    skillSources: {} // skill → { level, diploma } voor diploma-verified skills
+    skillSources: {}, // skill → { level, diploma } voor diploma-verified skills
+    doelfunctie: 'Helpende plus'
   };
 
   // ── DIPLOMA → SKILL MAPPING ──
@@ -1392,8 +1457,7 @@
   // ── NAVIGATION ──
   function nextFromDiplomas() {
     if (state.achtergrond === 'Instromer vanuit andere zorgorganisatie') {
-      buildFatima();
-      goTo('s-fatima');
+      goTo('s-fatima-groeipad');
     } else {
       goTo('s-vaard-01');
     }
@@ -1418,7 +1482,14 @@
       document.getElementById('inp-diploma').value = 'Helpende Zorg & Welzijn niveau 2';
       document.getElementById('inp-instelling').value = 'ROC Midden Nederland';
       document.getElementById('inp-jaar').value = '2022';
+      document.querySelector('#s-diplomas .stepper-fill').style.width = '66%';
+      document.querySelector('#s-diplomas .stepper-label').textContent = 'Stap 2/3 \u00a0\u2014\u00a0 Diploma\'s';
     }
+  }
+
+  // ── SAVE GROEIPAD ──
+  function saveGroeipad() {
+    state.doelfunctie = document.getElementById('inp-doelfunctie').value;
   }
 
   function updateNames() {
@@ -1427,6 +1498,10 @@
 
     // Update diploma screen title
     document.getElementById('h-diplomas').textContent = `Welke diploma's heeft ${state.voornaam}?`;
+
+    // Update groeipad screen
+    document.getElementById('h-groeipad-naam').textContent = state.voornaam;
+    document.querySelectorAll('.groeipad-voornaam').forEach(el => el.textContent = state.voornaam);
 
     // Update vaardigheden titles
     ['h-vaard-01', 'h-vaard-02', 'h-vaard-03'].forEach(id => {
@@ -1798,6 +1873,14 @@
     document.getElementById('inp-jaar').value = '2018';
     updateNames();
 
+
+    // Achtergrond listener — prefill naam voor demo persona's
+    document.getElementById('inp-achtergrond').addEventListener('change', function() {
+      if (this.value === 'Instromer vanuit andere zorgorganisatie') {
+        document.getElementById('inp-voornaam').value = 'Fatima';
+        document.getElementById('inp-achternaam').value = 'Yilmaz';
+      }
+    });
 
     // Diploma input listener
     const diplomaInput = document.getElementById('inp-diploma');
